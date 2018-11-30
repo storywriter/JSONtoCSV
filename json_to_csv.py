@@ -30,10 +30,17 @@ for jsonfile in jsonfiles:
       df = df.append( s, ignore_index=True )
 
 
-# 値を 0-1 の間に正規化する（分散が同じあたりに集まっている場合、正しく正規化できないので注意。どれかが必ず0と1になってしまう）
-df[ 'duration_ms' ] = ( df[ 'duration_ms' ] - df[ 'duration_ms' ].min() ) / ( df[ 'duration_ms' ].max() - df[ 'duration_ms' ].min() )
-df[ 'tempo' ] = ( df[ 'tempo' ] - df[ 'tempo' ].min() ) / ( df[ 'tempo' ].max() - df[ 'tempo' ].min() )
-df[ 'loudness' ] = ( df[ 'loudness' ] - df[ 'loudness' ].min() ) / ( df[ 'loudness' ].max() - df[ 'loudness' ].min() )
+# 値を 0-1 の間に正規化する（コメントアウトした式だと、分散が同じあたりに集まっている場合、正しく正規化できないので注意。どれかが必ず0と1になってしまう）
+# df[ 'duration_ms' ] = ( df[ 'duration_ms' ] - df[ 'duration_ms' ].min() ) / ( df[ 'duration_ms' ].max() - df[ 'duration_ms' ].min() )
+df[ 'duration_ms' ] = ( df[ 'duration_ms' ] - 0 ) / ( 2000000 - 0 )
+# df[ 'tempo' ] = ( df[ 'tempo' ] - df[ 'tempo' ].min() ) / ( df[ 'tempo' ].max() - df[ 'tempo' ].min() )
+df[ 'tempo' ] = ( df[ 'tempo' ] - 60 ) / ( 200 - 60 )
+# df[ 'loudness' ] = ( df[ 'loudness' ] - df[ 'loudness' ].min() ) / ( df[ 'loudness' ].max() - df[ 'loudness' ].min() )
+df[ 'loudness' ] = ( ( df[ 'loudness' ] - 0 ) / ( 60 - 0 ) ) * -1
+
+# GetWild用の調整
+# 値が小さすぎるものについて、増幅する
+df[ 'acousticness' ] = df[ 'acousticness' ] * 30
 
 
 # ファイルに出力
